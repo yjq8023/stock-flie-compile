@@ -8,7 +8,7 @@
 
 <script>
   if('EventSource' in window){
-    var es = new EventSource("http://localhost:3009/stream");
+    var es = new EventSource("http://43.226.33.31:3009/stream");
     es.onopen = function(){
       console.log("连接成功");
     }
