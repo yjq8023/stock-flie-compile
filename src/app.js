@@ -1,6 +1,5 @@
 const path = require('path')
 var http = require("http");
-var fs = require("fs");
 var chokidar = require('chokidar');
 
 
@@ -58,6 +57,7 @@ function insetData(item) {
 
 // 通知更新接口
 http.createServer(function(req,res){
+  console.log('aaaa')
   var filename = '.'+req.url;
   if(filename==='./stream'){
     res.writeHead(200,{
@@ -75,10 +75,8 @@ http.createServer(function(req,res){
     users.add(res, req)
 
   } else {
-    fs.readFile(path.resolve(__dirname , '../app.html'), "utf8", function (err, data) {
-      if (err) throw err;
-      res.end(data);
-    })
+    res.write('error')
+    res.end()
   }
 
 }).listen(3009);
