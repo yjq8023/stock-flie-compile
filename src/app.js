@@ -1,5 +1,6 @@
 const path = require('path')
 var http = require("http");
+var fs = require("fs");
 var chokidar = require('chokidar');
 
 
@@ -73,6 +74,11 @@ http.createServer(function(req,res){
 
     users.add(res, req)
 
+  } else {
+    fs.readFile(path.resolve(__dirname , '../app.html'), "utf8", function (err, data) {
+      if (err) throw err;
+      res.end(data);
+    })
   }
 
 }).listen(3009);
