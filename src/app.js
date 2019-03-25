@@ -23,6 +23,7 @@ var watcher = chokidar.watch(path.resolve(__dirname , './render-file/test.txt'),
 
 watcher
     .on('raw', function(event, path, details) {
+      console.log(path);
       render(path)
     })
 
@@ -44,14 +45,11 @@ function insetData(item) {
 
     database.query(addSql, addSqlParams, function (err, result) {
       if(err){
-        console.log('[INSERT ERROR] - ',err.message);
+        console.log('插入失败');
         return;
       }
 
-      console.log('--------------------------INSERT----------------------------');
-      //console.log('INSERT ID:',result.insertId);
-      console.log('INSERT ID:',result);
-      console.log('-----------------------------------------------------------------\n\n');
+      console.log('插入成功');
     });
   }
 }
