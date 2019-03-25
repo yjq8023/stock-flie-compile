@@ -9,7 +9,6 @@ const database = require('./databas')
 // 读取文件内容
 async function render(path) {
   const data = await fileCompile.render(path)
-  console.log(data);
   // 插入数据库
   data.forEach((item) => {
     insetData(item)
@@ -22,9 +21,8 @@ var watcher = chokidar.watch(path.resolve(__dirname , './render-file/test.txt'),
 });
 
 watcher
-    .on('raw', function(event, path, details) {
-      console.log(path);
-      render(path)
+    .on('raw', function(event, pathurl, details) {
+      render(path.resolve(__dirname , './render-file/test.txt'))
     })
 
 
