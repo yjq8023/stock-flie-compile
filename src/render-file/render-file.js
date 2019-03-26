@@ -1,4 +1,5 @@
 const fs = require('fs');
+const iconvLite = require('iconv-lite');
 
 const fileCompile = {
   render(path) {
@@ -7,7 +8,13 @@ const fileCompile = {
         if (err) {
           reject(err)
         } else {
-          resolve(this.compile(data.toString('utf8')))
+          // const txtGbk = iconvLite.decode(data, 'gbk')
+          // const txtUtf8 = iconvLite.decode(txtGbk, 'utf8')
+
+
+          const txtGbk = iconvLite.decode(data, 'gbk')
+          // const txtUtf8 = iconvLite.decode(txtGbk, 'utf8')
+          resolve(this.compile(txtGbk))
         }
       });
     })
