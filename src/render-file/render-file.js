@@ -30,7 +30,7 @@ const fileCompile = {
     const dataObj = []
 
     dataArr.forEach((item) => {
-      const itemArrRoot = item.split('  ')
+      const itemArrRoot = item.split('\t')
       const itemArr = []
       itemArrRoot.forEach(item => {
         if (item.trim()) {
