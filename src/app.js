@@ -7,6 +7,7 @@ const fileCompile = require('./render-file/render-file')
 const database = require('./databas')
 const Users = require('./users/users')
 const users = new Users()
+const pathurl = '../stock-file-data/data.txt'
 
 // 读取文件内容
 async function render(path) {
@@ -20,13 +21,13 @@ async function render(path) {
 }
 
 // 监视文件变化
-var watcher = chokidar.watch(path.resolve(__dirname , './render-file/test.txt'), {
+var watcher = chokidar.watch(path.resolve(__dirname , pathurl), {
   ignored: /[\/\\]\./, persistent: true
 });
 
 watcher
     .on('change', function(event, pathurl, details) {
-      render(path.resolve(__dirname , './render-file/test.txt'))
+      render(path.resolve(__dirname , pathurl))
     })
 
 
