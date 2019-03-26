@@ -7,7 +7,8 @@ const fileCompile = require('./render-file/render-file')
 const database = require('./databas')
 const Users = require('./users/users')
 const users = new Users()
-const pathurl = '../stock-file-data/data.txt'
+const pathurl = '../../stock-file-data/data.txt'
+console.log(path.resolve(__dirname , pathurl));
 
 // 读取文件内容
 async function render(path) {
@@ -26,7 +27,7 @@ var watcher = chokidar.watch(path.resolve(__dirname , pathurl), {
 });
 
 watcher
-    .on('change', function(event, pathurl, details) {
+    .on('change', function(event, path1, details) {
       render(path.resolve(__dirname , pathurl))
     })
 
@@ -56,31 +57,31 @@ function insetData(item) {
   }
 }
 
-// 通知更新接口
-http.createServer(function(req,res){
-  console.log('aaaa')
-  var filename = '.'+req.url;
-  if(filename==='./stream'){
-    res.writeHead(200,{
-      "Content-Type":"text/event-stream",
-      "Cache-Control":"no-cache",
-      "Connection":"keep-alive",
-      "Access-Control-Allow-Origin": '*',
-    });
+// // 通知更新接口
+// http.createServer(function(req,res){
+//   console.log('aaaa')
+//   var filename = '.'+req.url;
+//   if(filename==='./stream'){
+//     res.writeHead(200,{
+//       "Content-Type":"text/event-stream",
+//       "Cache-Control":"no-cache",
+//       "Connection":"keep-alive",
+//       "Access-Control-Allow-Origin": '*',
+//     });
+//
+//     res.write("retry: 10000\n");
+//     res.write("event: connecttime\n");
+//     res.write("data: "  + "connect\n\n");
+//     res.write("data: "  + "connect\n\n");
+//
+//     users.add(res, req)
+//
+//   } else {
+//     res.write('error')
+//     res.end()
+//   }
+//
+// }).listen(3009);
 
-    res.write("retry: 10000\n");
-    res.write("event: connecttime\n");
-    res.write("data: "  + "connect\n\n");
-    res.write("data: "  + "connect\n\n");
 
-    users.add(res, req)
-
-  } else {
-    res.write('error')
-    res.end()
-  }
-
-}).listen(3009);
-
-
-console.log("server start at port 3009");
+console.log("监听中。。。。");
