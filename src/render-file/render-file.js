@@ -13,7 +13,15 @@ const fileCompile = {
 
 
           const txtGbk = iconvLite.decode(data, 'gbk')
+
           // const txtUtf8 = iconvLite.decode(txtGbk, 'utf8')
+
+          if(!(txtGbk && txtGbk.trim())) {
+            return
+          }
+          console.log(txtGbk)
+          // 读取完清空原文件
+          this.clearFile(path)
           resolve(this.compile(txtGbk))
         }
       });
@@ -49,6 +57,16 @@ const fileCompile = {
       dataObj.push(obj)
     })
     return dataObj
+  },
+
+  clearFile(path) {
+    fs.writeFile(path, '', function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('清空源文件')
+      }
+    })
   }
 }
 
