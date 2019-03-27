@@ -47,7 +47,7 @@ const fileCompile = {
       const obj = {
         stock_code: itemArr[0],
         stock_name: itemArr[1],
-        update_time: itemArr[2],
+        update_time: itemArr[2] ? new Date(itemArr[2]).getTime() : 0,
         formula_time: itemArr[3],
         num1: itemArr[4],
         num2: itemArr[5],
