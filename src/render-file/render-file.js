@@ -19,7 +19,6 @@ const fileCompile = {
           if(!(txtGbk && txtGbk.trim())) {
             return
           }
-          console.log(txtGbk)
           // 读取完清空原文件
           this.clearFile(path)
           resolve(this.compile(txtGbk))
