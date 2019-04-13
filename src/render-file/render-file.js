@@ -21,41 +21,48 @@ const fileCompile = {
           }
           // 读取完清空原文件
           this.clearFile(path)
-          resolve(this.compile(txtGbk))
+          this.compile(txtGbk).then(() => {
+            resolve(this.compile(txtGbk))
+          }).catch((err) => {
+            console.log(err);
+          })
+
         }
       });
     })
   },
   compile(data) {
-    const dataArr = []
-    data.split('\n').forEach((item) => {
-      if(item.trim()) {
-        dataArr.push(item.trim())
-      }
-    })
-
-    const dataObj = []
-
-    dataArr.forEach((item) => {
-      const itemArrRoot = item.split('\t')
-      const itemArr = []
-      itemArrRoot.forEach(item => {
-        if (item.trim()) {
-          itemArr.push(item.trim())
+    return new Promise((resolve, reject) => {
+      const dataArr = []
+      data.split('\n').forEach((item) => {
+        if(item.trim()) {
+          dataArr.push(item.trim())
         }
       })
-      const obj = {
-        stock_code: itemArr[0],
-        stock_name: itemArr[1],
-        update_time: itemArr[2] ? new Date(itemArr[2]).getTime() : 0,
-        formula_time: itemArr[3],
-        num1: itemArr[4],
-        num2: itemArr[5],
-        num3: itemArr[6],
-      }
-      dataObj.push(obj)
+
+      const dataObj = []
+
+      dataArr.forEach((item) => {
+        const itemArrRoot = item.split('\t')
+        const itemArr = []
+        itemArrRoot.forEach(item => {
+          if (item.trim()) {
+            itemArr.push(item.trim())
+          }
+        })
+        const obj = {
+          stock_code: itemArr[0],
+          stock_name: itemArr[1],
+          update_time: itemArr[2] ? new Date(itemArr[2]).getTime() : 0,
+          formula_time: itemArr[3],
+          num1: itemArr[4],
+          num2: itemArr[5],
+          num3: itemArr[6],
+        }
+        dataObj.push(obj)
+      })
+      resolve(dataObj)
     })
-    return dataObj
   },
 
   clearFile(path) {
