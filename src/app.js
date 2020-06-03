@@ -54,7 +54,7 @@ watcher
 function insetData(item) {
   if (item) {
     // id, stockName, stockCode, stockPrice, stockGains, stockVolume, updateTime
-    var addSql = 'INSERT record (stockCode, stockName, updateTime, stockPrice, stockGains, stockVolume, type) VALUES(?,?,?,?,?,?,?)';
+    var addSql = 'INSERT stock (stockCode, stockName, updateTime, stockPrice, stockGains, stockVolume, type) VALUES(?,?,?,?,?,?,?)';
 
     database.query(addSql, item, function (err, result) {
       if (err) {
