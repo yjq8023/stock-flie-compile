@@ -56,6 +56,7 @@ function insetData(item) {
     // id, stockName, stockCode, stockPrice, stockGains, stockVolume, updateTime
     var addSql = 'INSERT stock (stockCode, stockName, updateTime, stockPrice, stockGains, stockVolume, type) VALUES(?,?,?,?,?,?,?)';
 
+    item[2] = Date.now().toString()
     database.query(addSql, item, function (err, result) {
       if (err) {
         console.error(err);
