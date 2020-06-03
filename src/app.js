@@ -1,60 +1,66 @@
 const path = require('path')
 var http = require("http");
 var chokidar = require('chokidar');
-
+var xlsx = require('node-xlsx');
+const iconvLite = require('iconv-lite');
+const fs = require('fs');
 
 const fileCompile = require('./render-file/render-file')
 const database = require('./databas')
 const Users = require('./users/users')
 const users = new Users()
-const pathurl = '../../stock-file-data/data.txt'
-
+const pathurl = path.join(__dirname, '../file/stockExportData.xls')
 // 读取文件内容
-async function render(path) {
-  const data = await fileCompile.render(path)
-  if (Array.isArray(data)) {
-    // 插入数据库
-    data.forEach((item) => {
-      insetData(item)
+function render() {
+  const workSheetsFromFile = xlsx.parse(pathurl);
+  workSheetsFromFile.forEach(item => {
+    if(item.data && item.data.length > 0) {
+      fs.writeFile(pathurl, '', function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('清空源文件')
+        }
+      })
+    }
+    item.data.forEach(data => {
+      insetData(data.map(col => iconvLite.decode(col.toString(), 'gbk')))
     })
-    users.send()
-  }
-
+  })
 }
-
+render()
 // 监视文件变化
-var watcher = chokidar.watch(path.resolve(__dirname, pathurl), {
-  ignored: /[\/\\]\./, persistent: true
+var watcher = chokidar.watch(path.join(__dirname, '../file'), {
+  ignored: /[\/\\]\./,
+  persistent: true,
+  interval: 2000,
 });
 
+let togger = true
 watcher
     .on('change', function (event, path1, details) {
-      render(path.resolve(__dirname, pathurl))
+      console.log('文件变化')
+      if (togger) {
+        togger = false
+        setTimeout(() => {
+          togger = true
+          render()
+        }, 1000)
+      }
     })
 
 
 // 数据插入数据库
 function insetData(item) {
-  if (item && item.stock_code && item.stock_name) {
-    var addSql = 'INSERT record (stock_code, stock_name, update_time, formula_time , num1 , num2 ,num3 ) VALUES(?,?,?,?,?,?,?)';
-    var addSqlParams = [
-      item.stock_code,
-      item.stock_name,
-      item.update_time,
-      item.formula_time,
-      item.num1,
-      item.num2,
-      item.num3
-    ];
+  if (item) {
+    // id, stockName, stockCode, stockPrice, stockGains, stockVolume, updateTime
+    var addSql = 'INSERT record (stockCode, stockName, updateTime, stockPrice, stockGains, stockVolume, type) VALUES(?,?,?,?,?,?,?)';
 
-
-    database.query(addSql, addSqlParams, function (err, result) {
+    database.query(addSql, item, function (err, result) {
       if (err) {
-        console.log(item.stock_name + '---插入失败---' + item.update_time);
+        console.error(item.stock_name + '---插入失败---' + item.update_time);
         return;
       }
-
-      console.log(item.stock_name + '---插入成功---' + item.update_time);
     });
   }
 }

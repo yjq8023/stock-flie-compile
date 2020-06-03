@@ -12,6 +12,7 @@
   "dependencies": {
     "chokidar": "^2.1.2",
     "iconv-lite": "^0.4.24",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "node-xlsx": "^0.15.0"
   }
 }
