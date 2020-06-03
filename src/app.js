@@ -58,7 +58,8 @@ function insetData(item) {
 
     database.query(addSql, item, function (err, result) {
       if (err) {
-        console.error(item.stock_name + '---插入失败---' + item.update_time);
+        console.error(err);
+        console.error(item.stockName + '---插入失败---' + item.updateTime);
         return;
       }
     });
